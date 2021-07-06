@@ -1,6 +1,4 @@
-# TukuToi Plugin Gnenerator
-
-This Plugin can be used to generate new plugins based on the [Better WordPress Plugin Boilerplate](https://github.com/TukuToi/better-wp-plugin-boilerplate), or any custom boilerplate.
+# TukuToi Plugin Generator
 
 The plugin helps generating new plugins based on the [Better WordPress Plugin Boilerplate](https://github.com/TukuToi/better-wp-plugin-boilerplate), or any custom boilerplate. You can install and activate it like any other plugin.
 
