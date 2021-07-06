@@ -14,7 +14,7 @@
  * @wordpress-plugin
  * Plugin Name:       TukuToi Plugin Generator
  * Plugin URI:        https://www.tukutoi.com/program/tukutoi-plugin-generator
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Plugin to generate ohter Plugins.
  * Version:           1.0.0
  * Author:            TukuToi
  * Author URI:        https://www.tukutoi.com/
