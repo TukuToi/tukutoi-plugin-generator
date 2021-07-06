@@ -1,4 +1,4 @@
-=== TukuToi Plugin Gnenerator ===
+=== TukuToi Plugin Generator ===
 Contributors: bedas
 Donate link: https://www.tukutoi.com/
 Tags: plugin, generator, boilerplate
