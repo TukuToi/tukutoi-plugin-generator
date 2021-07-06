@@ -28,4 +28,4 @@ Have a look at the Plugin Sources to see how it is built.
 Strictly speaking you can use this plugin to replace *anything* in *anything*.
 So you could for example upload a folder full of text files and replace any string(s) in all those files, or else even rename files as you want. However the intention of the plugin is to make it easier for developers to generate theyr *own* version of the plugin boiler-plates and not waste time with string replacements.
 
-Enjoy!
+Enjoy! 
