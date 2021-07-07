@@ -6,8 +6,8 @@ Then, insert the `[generate_plugin]` ShortCode in any page and visit the page.
 Fill out the form and submit it.
 This will generate a new Plugin in the Plugin's existing `new-sources` folder.
 
-Future versions of this plugin will allow direct ZIP download and delete the just generated plugin right after.
-As well development will be done to replace more things than the current defaults.
+Future versions of this plugin will delete the just generated plugin right after, right now however the generated Plugin will stay in archive.
+Development will be done to replace more things than the current defaults.
 
 This plugin can be used by *anyone* who wants to create a Plugin generator, all you need to do is replace the plugin source in the `source` folder of this plugin.
 As well of course the Generator is lookgin for certain string patterns to be replaced, thus your boilerplate should respect those patterns.
