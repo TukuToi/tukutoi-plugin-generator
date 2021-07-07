@@ -12,8 +12,11 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the public-facing stylesheet and JavaScript.
+ * Defines the plugin name, version, enqueues styles and builds form.
+ * Gets, creates, renames and populates new Plugin files.
+ * Downloads files.
+ *
+ * @todo Delete Files.
  *
  * @package    Tkt_Plugin_Generator
  * @subpackage Tkt_Plugin_Generator/public
@@ -65,6 +68,87 @@ class Tkt_Plugin_Generator_Public {
 	}
 
 	/**
+	 * Register the ShortCode.
+	 *
+	 * @since 1.0.0
+	 */
+	public function add_shortcode() {
+
+		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
+			add_shortcode( 'generate_plugin', array( $this, 'generate_plugin_form' ) );
+		}
+
+	}
+
+	/**
+	 * ShortCode to show the Generate Form.
+	 *
+	 * @since 1.0.0
+	 * @param array $atts The ShortCode attributes.
+	 */
+	public function generate_plugin_form( $atts ) {
+
+		ob_start();
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/tkt-plugin-generator-public-display.php';
+
+		$output = ob_get_clean();
+
+		return $output;
+
+	}
+
+	/**
+	 * Create new Folder with files,
+	 * Replace all strings and rename files,
+	 * Zip new folder and Download.
+	 *
+	 * @since 1.0.0
+	 * @param array $new_data Array with new data to use for replace.
+	 */
+	public function replace_zip_and_download( $new_data ) {
+
+		// Validate POST and Nonce.
+		if ( false === $this->validate_post_and_nonce() ) {
+			return;
+		}
+
+		// Get New POSTed data.
+		$new_data   = $this->get_new_data();
+
+		// Build all necessary variables.
+		$source     = plugin_dir_path( __DIR__ ) . 'source';
+		$filename   = $new_data['plugin_file_name'];
+		$zip_name   = $new_data['plugin_file_name'] . '.zip';
+		$orig_path  = plugin_dir_path( __DIR__ ) . 'new-sources/' . $filename;
+		$zip_path   = plugin_dir_path( __DIR__ ) . 'new-sources/' . $zip_name;
+
+		// Create a copy of the source files to the new source.
+		$this->create_source_copy( $source, $orig_path, 0755 );
+
+		// Find all files in the new source.
+		$files = $this->find_all_files( $orig_path );
+
+		foreach ( $files as $file ) {
+
+			// Replace all strings (including filenames) in the new source.
+			$this->replace_names( $file, $new_data );
+
+		}
+
+		// Build a new zip with the new source.
+		$zip = $this->zip_up_folder_recursive( $orig_path, $zip_path );
+
+		if ( true === $zip ) {
+
+			// Download the new Zip.
+			$this->download_zip( $zip_path, $zip_name );
+
+		}
+
+	}
+
+	/**
 	 * Copy a file, or recursively copy a folder and its contents
 	 *
 	 * @author      Aidan Lister <aidan@php.net>
@@ -75,7 +159,7 @@ class Tkt_Plugin_Generator_Public {
 	 * @param       int    $permissions New folder creation permissions.
 	 * @return      bool     Returns true on success, false on failure.
 	 */
-	private function xcopy( $source, $dest, $permissions = 0755 ) {
+	private function create_source_copy( $source, $dest, $permissions = 0755 ) {
 
 		$source_hash = $this->hash_directory( $source );
 
@@ -106,7 +190,7 @@ class Tkt_Plugin_Generator_Public {
 
 			// Deep copy directories.
 			if ( $source_hash != $this->hash_directory( $source . '/' . $entry ) ) {
-				 $this->xcopy( "$source/$entry", "$dest/$entry", $permissions );
+				 $this->create_source_copy( "$source/$entry", "$dest/$entry", $permissions );
 			}
 		}
 
@@ -232,25 +316,136 @@ class Tkt_Plugin_Generator_Public {
 	}
 
 	/**
-	 * Create new Folder with files,
-	 * Replace all strings and rename files,
-	 * Zip new folder and Download.
+	 * Create a Zip of the new source folder.
 	 *
-	 * @since 1.0.0
-	 * @param array $new_data Array with new data to use for replace.
+	 * This code requires PHP to be compiled with ZIP Support.
+	 *
+	 * Installation for Linux users:
+	 * compile PHP with zip support by using the –enable-zip configure option.
+	 *
+	 * Installation for Windows users:
+	 * As of PHP 5.3 this extension is inbuilt.
+	 * Before, Windows users need to enable php_zip.dll inside of php.ini in order to use its functions.
+	 *
+	 * @since 1.0.1
+	 * @param string $source the source folder path.
+	 * @param string $destination the destination folder path.
 	 */
-	public function replace_zip_and_download( $new_data ) {
+	private function zip_up_folder_recursive( $source, $destination ) {
 
-		if ( ! isset( $_REQUEST['generate_plugin_nonce'] ) || ( isset( $_REQUEST['generate_plugin_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['generate_plugin_nonce'] ) ), 'generate_plugin_submit' ) ) ) {
+		if ( ! extension_loaded( 'zip' ) || ! file_exists( $source ) ) {
+			return false;
+		}
 
-			return;
+		$zip = new ZipArchive();
+
+		if ( ! $zip->open( $destination, ZIPARCHIVE::CREATE ) ) {
+			return false;
+		}
+
+		$source = str_replace( '\\', '/', realpath( $source ) );
+
+		if ( is_dir( $source ) === true ) {
+			$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $source ), RecursiveIteratorIterator::SELF_FIRST );
+
+			foreach ( $files as $file ) {
+				$file = str_replace( '\\', '/', $file );
+
+				// Ignore "." and ".." folders.
+				if ( in_array( substr( $file, strrpos( $file, '/' ) + 1 ), array( '.', '..' ) ) ) {
+					continue;
+				}
+
+				$file = realpath( $file );
+
+				if ( is_dir( $file ) === true ) {
+					$zip->addEmptyDir( str_replace( $source . '/', '', $file . '/' ) );
+				} elseif ( is_file( $file ) === true ) {
+					$zip->addFromString( str_replace( $source . '/', '', $file ), file_get_contents( $file ) );
+				}
+			}
+		} elseif ( is_file( $source ) === true ) {
+			$zip->addFromString( basename( $source ), file_get_contents( $source ) );
+		}
+
+		return $zip->close();
+
+	}
+
+	/**
+	 * Download the ZIPped file.
+	 *
+	 * @since 1.0.1
+	 * @param string $zip_path The Path to the file to download.
+	 * @param string $zip_name The Name of the ZIP.
+	 */
+	private function download_zip( $zip_path, $zip_name ) {
+
+		header( 'Content-type: application/zip' );
+		header( 'Content-Disposition: attachment; filename=' . $zip_name );
+		header( 'Content-length: ' . filesize( $zip_path ) );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+		readfile( $zip_path );
+
+	}
+
+	/**
+	 * Check for $_POST and Nonce.
+	 *
+	 * @since 1.0.1
+	 * @return bool false or wp_die() If $_POST is not set, return. If $_POST is set and Nonce is invalid, wp_die().
+	 */
+	private function validate_post_and_nonce() {
+
+		if ( empty( $_POST ) || ( ! empty( $_POST ) && ! isset( $_POST['tkt_plugin_generator_submit'] ) ) ) {
+
+			return false;
 
 		}
 
-		if ( empty( $_POST ) || ( isset( $_POST['form_errors'] ) && empty( $_POST['form_errors'] ) ) ) {
-			return;
+		if ( ! empty( $_POST )
+			&& isset( $_POST['tkt_plugin_generator_submit'] )
+			&& ! isset( $_POST['generate_plugin_nonce'] )
+			|| ( isset( $_POST['generate_plugin_nonce'] )
+				&& ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['generate_plugin_nonce'] ) ), 'generate_plugin_submit' )
+			)
+		) {
+
+			wp_die(
+				esc_html( 'Invalid Form Submission' ),
+				esc_html( 'Invalid Form Submission' ),
+				array(
+					'response' => intval( 422 ),
+					'code'     => esc_html( 'invalid_form_submission' ),
+					'back_link' => (bool) true,
+				)
+			);
+
 		}
 
+	}
+
+	/**
+	 * Get new data from $_POST
+	 *
+	 * @since 1.0.1
+	 * @return array $new_data The Data submitted in the form.
+	 */
+	private function get_new_data() {
+
+		/**
+		 * WPCS FALSE ALARM.
+		 *
+		 * WPCS throws a "Processing Form data without nonce verification" here.
+		 * However this is a false alarm, we do indeed validate the form, $_POST AND the NONCE in
+		 * validate_post_and_nonce() method of same class.
+		 * That method returns or wp_die()'s if falsy, thus we are safe.
+		 *
+		 * @since 1.0.1
+		 * @see $this->validate_post_and_nonce();
+		 * @see $this->replace_zip_and_download();
+		 */
 		$new_data = array(
 			'plugin_prefix'      => isset( $_POST['plugin_prefix'] ) ? sanitize_title( wp_unslash( $_POST['plugin_prefix'] ), '', 'save' ) . '_' : 'pfx_',
 			'plugin_full_name'   => isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : 'Plugin Name',
@@ -261,49 +456,7 @@ class Tkt_Plugin_Generator_Public {
 			'author_email'       => isset( $_POST['author_email'] ) ? '<' . sanitize_email( wp_unslash( $_POST['author_email'] ) ) . '>' : '<your@email.com>',
 		);
 
-		$this->xcopy( plugin_dir_path( __DIR__ ) . 'source', plugin_dir_path( __DIR__ ) . 'new-sources/' . $new_data['plugin_file_name'], 0755 );
-
-		$files = $this->find_all_files( plugin_dir_path( __DIR__ ) . 'new-sources/' . $new_data['plugin_file_name'] );
-
-		foreach ( $files as $file ) {
-
-			$this->replace_names( $file, $new_data );
-
-		}
-
-		wp_redirect( home_url( '/thank-you/' ) );
-		exit;
-
-	}
-
-	/**
-	 * ShortCode to show the Generate Form.
-	 *
-	 * @since 1.0.0
-	 * @param array $atts The ShortCode attributes.
-	 */
-	public function generate_plugin_form( $atts ) {
-
-		ob_start();
-
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/tkt-plugin-generator-public-display.php';
-
-		$output = ob_get_clean();
-
-		return $output;
-
-	}
-
-	/**
-	 * Register the ShortCode.
-	 *
-	 * @since 1.0.0
-	 */
-	public function add_shortcode() {
-
-		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
-			add_shortcode( 'generate_plugin', array( $this, 'generate_plugin_form' ) );
-		}
+		return $new_data;
 
 	}
 
