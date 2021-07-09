@@ -4,7 +4,7 @@ Donate link: https://www.tukutoi.com/
 Tags: plugin, generator, boilerplate
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.0.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,8 @@ Then, insert the `[generate_plugin]` ShortCode in any page and visit the page.
 Fill out the form and submit it.
 This will generate a new Plugin in the Plugin's existing `new-sources` folder and immediately download it to your Computer.
 
-Future versions of this plugin will delete the just generated plugin right after, right now however the generated Plugin will stay in archive.
+The plugin immediately deletes the just generated plugin right after download.
+
 Development will be done to replace more things than the current defaults.
 
 This plugin can be used by *anyone* who wants to create a Plugin generator, all you need to do is replace the plugin source in the `source` folder of this plugin.

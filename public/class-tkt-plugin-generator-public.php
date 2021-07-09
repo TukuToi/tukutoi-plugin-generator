@@ -120,8 +120,8 @@ class Tkt_Plugin_Generator_Public {
 		$source     = plugin_dir_path( __DIR__ ) . 'source';
 		$filename   = $new_data['plugin_file_name'];
 		$zip_name   = $new_data['plugin_file_name'] . '.zip';
-		$orig_path  = plugin_dir_path( __DIR__ ) . 'new-sources/' . $filename;
-		$zip_path   = plugin_dir_path( __DIR__ ) . 'new-sources/' . $zip_name;
+		$orig_path  = plugin_dir_path( __DIR__ ) . 'builds/' . $filename;
+		$zip_path   = plugin_dir_path( __DIR__ ) . 'builds/' . $zip_name;
 
 		// Create a copy of the source files to the new source.
 		$this->create_source_copy( $source, $orig_path, 0755 );
@@ -370,6 +370,9 @@ class Tkt_Plugin_Generator_Public {
 
 		return $zip->close();
 
+		// Delete the Source Build.
+		$this->delete_file( $source );
+
 	}
 
 	/**
@@ -387,6 +390,35 @@ class Tkt_Plugin_Generator_Public {
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
 		readfile( $zip_path );
+
+		$this->delete_file( $zip_path );
+
+	}
+
+	/**
+	 * Delete the ZIPped file.
+	 *
+	 * @since 1.1.1
+	 * @param string $path The Path to the file to delete.
+	 */
+	private function delete_file( $path ) {
+
+		if ( is_dir( $target ) ) {
+
+			$files = glob( $target . '*', GLOB_MARK ); // GLOB_MARK adds a slash to directories returned.
+
+			foreach ( $files as $file ) {
+
+				delete_files( $file );
+
+			}
+
+			rmdir( $target );
+		} elseif ( is_file( $target ) ) {
+
+			unlink( $target );
+
+		}
 
 	}
 
