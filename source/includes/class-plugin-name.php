@@ -75,11 +75,17 @@ class Plugin_Name {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
+
 		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
+
 			$this->version = PLUGIN_NAME_VERSION;
+
 		} else {
+
 			$this->version = '1.0.0';
+
 		}
+
 		$this->plugin_name = 'plugin-name';
 		$this->plugin_prefix = 'pfx_';
 
@@ -182,7 +188,8 @@ class Plugin_Name {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		$this->loader->add_shortcode( $this->plugin_name . '-shortcode', $plugin_public, 'plugin_name_shortcode_func' );
+		// Shortcode name must be the same as in shortcode_atts() third parameter.
+		$this->loader->add_shortcode( $this->get_plugin_prefix() . 'shortcode', $plugin_public, 'plugin_name_shortcode_func' );
 
 	}
 

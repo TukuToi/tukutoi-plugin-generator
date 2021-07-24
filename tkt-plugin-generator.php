@@ -15,7 +15,7 @@
  * Plugin Name:       TukuToi Plugin Generator
  * Plugin URI:        https://www.tukutoi.com/program/tukutoi-plugin-generator
  * Description:       Plugin to generate ohter Plugins.
- * Version:           1.0.1
+ * Version:           1.2.1
  * Author:            TukuToi
  * Author URI:        https://www.tukutoi.com/
  * License:           GPL-2.0+
@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TKT_PLUGIN_GENERATOR_VERSION', '1.0.1' );
+define( 'TKT_PLUGIN_GENERATOR_VERSION', '1.2.1' );
 
 /**
  * The core plugin class that is used to define internationalization,
