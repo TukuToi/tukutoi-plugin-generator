@@ -2,3 +2,18 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+#tkt-plugin-generator-generator {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+#tkt-plugin-generator-generator input {
+    min-width: 300px;
+}
+#tkt-plugin-generator-generator div {
+    padding: 16px;
+}
+#tkt-plugin-generator-generator label {
+    padding: 16px;
+}

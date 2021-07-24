@@ -302,11 +302,21 @@ class Tkt_Plugin_Generator_Public {
 
 		$file_contents = file_get_contents( $file );
 		$file_contents = str_replace( 'pfx_', $new_data['plugin_prefix'], $file_contents );
-		$file_contents = str_replace( 'Plugin Name', $new_data['plugin_full_name'], $file_contents );
+		$file_contents = str_replace( 'My Plugin Name', $new_data['plugin_full_name'], $file_contents );
 		$file_contents = str_replace( 'plugin-name', $new_data['plugin_file_name'], $file_contents );
+		$file_contents = str_replace( 'Plugin Human Name', $new_data['plugin_human_name'], $file_contents );
 		$file_contents = str_replace( 'Plugin_Name', $new_data['plugin_class_name'], $file_contents );
+		$file_contents = str_replace( 'https://plugin.com/plugin-name-uri/', $new_data['plugin_uri'], $file_contents );
+		$file_contents = str_replace( '1.0.0', $new_data['plugin_version'], $file_contents );
+		$file_contents = str_replace( 'This is a short description of what the plugin does. It\'s displayed in the WordPress admin area.', $new_data['plugin_description'], $file_contents );
+		$file_contents = str_replace( 'http://example.com', $new_data['author_uri'], $file_contents );
+		$file_contents = str_replace( 'Requires at least: 4.9', 'Requires at least: ' . $new_data['plugin_requires'], $file_contents );
+		$file_contents = str_replace( 'Tested up to: 5.7', 'Tested up to: ' . $new_data['plugin_tested'], $file_contents );
+		$file_contents = str_replace( 'Stable tag: 1.0.0', 'Stable tag: ' . $new_data['plugin_stable'], $file_contents );
+		$file_contents = str_replace( 'comments, spam', $new_data['plugin_tags'], $file_contents );
+		$file_contents = str_replace( 'https://donate.tld/', $new_data['donate_link'], $file_contents );
 		$file_contents = str_replace( 'PLUGIN_NAME_', $new_data['plugin_const_name'], $file_contents );
-		$file_contents = str_replace( 'Your Name', $new_data['author_name'], $file_contents );
+		$file_contents = str_replace( 'Your Name or Your Company Name', $new_data['author_name'], $file_contents );
 		$file_contents = str_replace( '<email@example.com>', $new_data['author_email'], $file_contents );
 		$new_file      = str_replace( 'plugin-name', $new_data['plugin_file_name'], $file );
 
@@ -480,11 +490,21 @@ class Tkt_Plugin_Generator_Public {
 		 */
 		$new_data = array(
 			'plugin_prefix'      => isset( $_POST['plugin_prefix'] ) ? sanitize_title( wp_unslash( $_POST['plugin_prefix'] ), '', 'save' ) . '_' : 'pfx_',
-			'plugin_full_name'   => isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : 'Plugin Name',
+			'plugin_full_name'   => isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : 'My Plugin Name',
 			'plugin_file_name'   => isset( $_POST['plugin_slug'] ) ? sanitize_title( wp_unslash( $_POST['plugin_slug'] ), '', 'save' ) : 'plugin-slug',
-			'plugin_class_name'  => str_replace( '-', '_', ucwords( isset( $_POST['plugin_slug'] ) ? sanitize_title( wp_unslash( $_POST['plugin_slug'] ), '', 'save' ) : 'plugin-slug' ) ),
+			'plugin_human_name'   => isset( $_POST['plugin_human'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_human'] ), '', 'save' ) : sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ),
+			'plugin_class_name'  => str_replace( '-', '_', ucwords( isset( $_POST['plugin_slug'] ) ? sanitize_title( wp_unslash( $_POST['plugin_slug'] ), '', 'save' ) : 'plugin-slug', '-' ) ),
+			'plugin_uri'         => isset( $_POST['plugin_uri'] ) ? esc_url_raw( wp_unslash( $_POST['plugin_uri'] ) ) : 'https://plugin.com/plugin-name-uri/',
+			'plugin_description'         => isset( $_POST['plugin_description'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) ) : 'This is a short description of what the plugin does. It\'s displayed in the WordPress admin area.',
+			'plugin_version'         => isset( $_POST['plugin_version'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_version'] ) ) : '1.0.0',
+			'author_uri'         => isset( $_POST['author_uri'] ) ? esc_url_raw( wp_unslash( $_POST['author_uri'] ) ) : 'https://author.com/',
+			'plugin_requires'        => isset( $_POST['plugin_requires'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_requires'] ) ) : '4.9',
+			'plugin_tested'          => isset( $_POST['plugin_tested'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_tested'] ) ) : '5.8',
+			'plugin_stable'          => isset( $_POST['plugin_stable'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_stable'] ) ) : '1.0.0',
+			'plugin_tags'        => isset( $_POST['plugin_tags'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_tags'] ) ) : 'comments, spam',
+			'donate_link'        => isset( $_POST['donate_link'] ) ? esc_url_raw( wp_unslash( $_POST['donate_link'] ) ) : 'https://donate.tld/',
 			'plugin_const_name'  => strtoupper( str_replace( '-', '_', ucwords( isset( $_POST['plugin_slug'] ) ? sanitize_title( wp_unslash( $_POST['plugin_slug'] ), '', 'save' ) : 'plugin-slug' ) ) ) . '_',
-			'author_name'        => isset( $_POST['author_name'] ) ? sanitize_text_field( wp_unslash( $_POST['author_name'] ) ) : 'Your Name',
+			'author_name'        => isset( $_POST['author_name'] ) ? sanitize_text_field( wp_unslash( $_POST['author_name'] ) ) : 'Your Name or Your Company Name',
 			'author_email'       => isset( $_POST['author_email'] ) ? '<' . sanitize_email( wp_unslash( $_POST['author_email'] ) ) . '>' : '<your@email.com>',
 		);
 

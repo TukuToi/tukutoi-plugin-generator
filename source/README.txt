@@ -1,6 +1,6 @@
-=== Better WordPress Plugin Boilerplate ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
+=== Plugin Human Name ===
+Contributors: Your Name or Your Company Name
+Donate link: https://donate.tld/
 Tags: comments, spam
 Requires at least: 4.9
 Tested up to: 5.7
