@@ -153,7 +153,7 @@ class Tkt_Plugin_Generator_Public {
 	 *
 	 * @author      Aidan Lister <aidan@php.net>
 	 * @version     1.0.1
-	 * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
+	 * @link        https://aidanlister.com/2004/04/recursively-copying-directories-in-php/
 	 * @param       string $source    Source path.
 	 * @param       string $dest      Destination path.
 	 * @param       int    $permissions New folder creation permissions.
@@ -309,7 +309,7 @@ class Tkt_Plugin_Generator_Public {
 		$file_contents = str_replace( 'https://plugin.com/plugin-name-uri/', $new_data['plugin_uri'], $file_contents );
 		$file_contents = str_replace( '1.0.0', $new_data['plugin_version'], $file_contents );
 		$file_contents = str_replace( 'This is a short description of what the plugin does. It\'s displayed in the WordPress admin area.', $new_data['plugin_description'], $file_contents );
-		$file_contents = str_replace( 'http://example.com', $new_data['author_uri'], $file_contents );
+		$file_contents = str_replace( 'https://example.com', $new_data['author_uri'], $file_contents );
 		$file_contents = str_replace( 'Requires at least: 4.9', 'Requires at least: ' . $new_data['plugin_requires'], $file_contents );
 		$file_contents = str_replace( 'Tested up to: 5.7', 'Tested up to: ' . $new_data['plugin_tested'], $file_contents );
 		$file_contents = str_replace( 'Stable tag: 1.0.0', 'Stable tag: ' . $new_data['plugin_stable'], $file_contents );
@@ -413,21 +413,31 @@ class Tkt_Plugin_Generator_Public {
 	 */
 	private function delete_file( $path ) {
 
-		if ( is_dir( $target ) ) {
+		$targets = array(
+			'zip'       => $path,
+			'folder'    => str_replace( '.zip', '', $path ),
+		);
 
-			$files = glob( $target . '*', GLOB_MARK ); // GLOB_MARK adds a slash to directories returned.
+		foreach ( $targets as $item ) {
 
-			foreach ( $files as $file ) {
+			if ( is_dir( $item ) ) {
 
-				delete_files( $file );
+				$files = glob( $item . '*', GLOB_MARK ); // GLOB_MARK adds a slash to directories returned.
+
+				foreach ( $files as $file ) {
+
+					$this->delete_file( $file );
+
+				}
+
+				if ( is_dir( $item ) ) {
+					rmdir( $item );
+				}
+			} elseif ( is_file( $item ) ) {
+
+				unlink( $item );
 
 			}
-
-			rmdir( $target );
-		} elseif ( is_file( $target ) ) {
-
-			unlink( $target );
-
 		}
 
 	}
