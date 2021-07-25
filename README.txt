@@ -4,13 +4,15 @@ Donate link: https://www.tukutoi.com/
 Tags: plugin, generator, boilerplate
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.2.1
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 This Plugin can be used to generate new plugins based on the [Better WordPress Plugin Boilerplate](https://github.com/TukuToi/better-wp-plugin-boilerplate), or any custom boilerplate.
 
 == Description ==
+
+An online instance if this Plugin Generator can be found at [GeneratePlugins.com](https://www.generateplugins.com).
 
 The plugin helps generating new plugins based on the [Better WordPress Plugin Boilerplate](https://github.com/TukuToi/better-wp-plugin-boilerplate), or any custom boilerplate. You can install and activate it like any other plugin.
 
