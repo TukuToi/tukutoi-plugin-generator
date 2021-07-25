@@ -17,3 +17,6 @@
 #tkt-plugin-generator-generator label {
     padding: 16px;
 }
+div.form-input-container{
+    width: 100%;
+}
