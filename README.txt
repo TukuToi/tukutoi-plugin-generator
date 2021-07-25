@@ -12,6 +12,8 @@ This Plugin can be used to generate new plugins based on the [Better WordPress P
 
 == Description ==
 
+An online instance if this Plugin Generator can be found at [GeneratePlugins.com](https://www.generateplugins.com).
+
 The plugin helps generating new plugins based on the [Better WordPress Plugin Boilerplate](https://github.com/TukuToi/better-wp-plugin-boilerplate), or any custom boilerplate. You can install and activate it like any other plugin.
 
 Then, insert the `[generate_plugin]` ShortCode in any page and visit the page.
