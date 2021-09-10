@@ -1,4 +1,5 @@
 # TukuToi Plugin Generator
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=TukuToi_tukutoi-plugin-generator&metric=bugs)](https://sonarcloud.io/dashboard?id=TukuToi_tukutoi-plugin-generator) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=TukuToi_tukutoi-plugin-generator&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=TukuToi_tukutoi-plugin-generator) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TukuToi_tukutoi-plugin-generator&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=TukuToi_tukutoi-plugin-generator) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=TukuToi_tukutoi-plugin-generator&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=TukuToi_tukutoi-plugin-generator) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TukuToi_tukutoi-plugin-generator&metric=security_rating)](https://sonarcloud.io/dashboard?id=TukuToi_tukutoi-plugin-generator)
 
 An online instance if this Plugin Generator can be found at [GeneratePlugins.com](https://www.generateplugins.com).
 
