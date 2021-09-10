@@ -104,9 +104,8 @@ class Tkt_Plugin_Generator_Public {
 	 * Zip new folder and Download.
 	 *
 	 * @since 1.0.0
-	 * @param array $new_data Array with new data to use for replace.
 	 */
-	public function replace_zip_and_download( $new_data ) {
+	public function replace_zip_and_download() {
 
 		// Validate POST and Nonce.
 		if ( false === $this->validate_post_and_nonce() ) {
@@ -379,9 +378,6 @@ class Tkt_Plugin_Generator_Public {
 		}
 
 		return $zip->close();
-
-		// Delete the Source Build.
-		$this->delete_file( $source );
 
 	}
 
