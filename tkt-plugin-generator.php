@@ -9,13 +9,14 @@
  *
  * @link              https://www.tukutoi.com/
  * @since             1.0.0
+ * @since             2.0.0 Replaced Source Files.
  * @package           Tkt_Plugin_Generator
  *
  * @wordpress-plugin
  * Plugin Name:       TukuToi Plugin Generator
  * Plugin URI:        https://www.tukutoi.com/program/tukutoi-plugin-generator
  * Description:       Plugin to generate ohter Plugins.
- * Version:           1.3.2
+ * Version:           2.0.0
  * Author:            TukuToi
  * Author URI:        https://www.tukutoi.com/
  * License:           GPL-2.0+
@@ -34,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TKT_PLUGIN_GENERATOR_VERSION', '1.3.2' );
+define( 'TKT_PLUGIN_GENERATOR_VERSION', '2.0.0' );
 
 /**
  * The core plugin class that is used to define internationalization,
