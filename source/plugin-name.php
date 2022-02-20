@@ -40,6 +40,11 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 /**
+ * Define the Plugin basename
+ */
+define( 'PLUGIN_NAME_BASE_NAME', plugin_basename( __FILE__ ) );
+
+/**
  * The code that runs during plugin activation.
  *
  * This action is documented in includes/class-plugin-name-activator.php
