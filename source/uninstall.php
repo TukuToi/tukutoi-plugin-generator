@@ -34,7 +34,7 @@
  *
  * @since 1.0.0
  */
-function plugin_name_uninstall() {
+function pfx_uninstall() {
 
 	if ( ! defined( 'WP_UNINSTALL_PLUGIN' )
 		|| empty( $_REQUEST )
@@ -58,4 +58,4 @@ function plugin_name_uninstall() {
 
 }
 
-plugin_name_uninstall();
+pfx_uninstall();

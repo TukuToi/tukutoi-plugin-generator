@@ -12,11 +12,14 @@
  * @package           Plugin_Name
  *
  * @wordpress-plugin
- * Plugin Name:       Plugin Name
+ * Plugin Name:       My Plugin Name
  * Plugin URI:        https://plugin.com/plugin-name-uri/
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0
  * Author:            Your Name or Your Company Name
+ * Requires at least: X.X
+ * Requires PHP:      X.X
+ * Tested up to:      X.X
  * Author URI:        https://example.com/
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
@@ -37,12 +40,17 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 /**
+ * Define the Plugin basename
+ */
+define( 'PLUGIN_NAME_BASE_NAME', plugin_basename( __FILE__ ) );
+
+/**
  * The code that runs during plugin activation.
  *
  * This action is documented in includes/class-plugin-name-activator.php
  * Full security checks are performed inside the class.
  */
-function plugin_name_activate() {
+function pfx_activate() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-activator.php';
 	Plugin_Name_Activator::activate();
 }
@@ -53,13 +61,13 @@ function plugin_name_activate() {
  * This action is documented in includes/class-plugin-name-deactivator.php
  * Full security checks are performed inside the class.
  */
-function plugin_name_deactivate() {
+function pfx_deactivate() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name-deactivator.php';
 	Plugin_Name_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'plugin_name_activate' );
-register_deactivation_hook( __FILE__, 'plugin_name_deactivate' );
+register_activation_hook( __FILE__, 'pfx_activate' );
+register_deactivation_hook( __FILE__, 'pfx_deactivate' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -79,10 +87,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-plugin-name.php';
  *
  * @since    1.0.0
  */
-function plugin_name_run() {
+function pfx_run() {
 
 	$plugin = new Plugin_Name();
 	$plugin->run();
 
 }
-plugin_name_run();
+pfx_run();
